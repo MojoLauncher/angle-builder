@@ -5,6 +5,6 @@ mkdir angle
 cd angle
 fetch angle
 echo "target_os = ['android']" >> .gclient
-gclient sync
+gclient sync --no-history
 mkdir out
 mkdir ../build_out
