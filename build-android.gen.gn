@@ -4,4 +4,5 @@ angle_enable_vulkan = true
 is_component_build = false
 #is_official_build = true
 is_debug = false
+angle_enable_trace = false
 android_ndk_api_level = 26
