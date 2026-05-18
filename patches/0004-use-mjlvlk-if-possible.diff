@@ -1,0 +1,17 @@
+diff --git a/src/common/vulkan/libvulkan_loader.cpp b/src/common/vulkan/libvulkan_loader.cpp
+index f1b7e30..8b865f1 100644
+--- a/src/common/vulkan/libvulkan_loader.cpp
++++ b/src/common/vulkan/libvulkan_loader.cpp
+@@ -39,6 +39,12 @@ void *OpenLibVulkan()
+ #endif  // defined(ANGLE_USE_CUSTOM_LIBVULKAN)
+     };
+ 
++    // MojoLauncher hack: we have mjlkvlk preloaded here if ANGLE is running in the pojav-driver namespace
++    // Let's just load it
++    void *handle = OpenSystemLibraryWithExtension("libmjlvlk.so", SearchType::AlreadyLoaded);
++    if (handle)
++	    return handle;
++
+     for (angle::SearchType searchType : kSearchTypes)
+     {
+         for (const char *libraryName : kLibVulkanNames)
