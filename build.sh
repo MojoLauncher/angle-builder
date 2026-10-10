@@ -7,7 +7,7 @@ cd angle
 fetch --no-history angle
 
 echo "target_os = ['android']" >> .gclient
-gclient sync --no-history
+gclient sync --no-history --revision angle@c411081f2d36632a5850bc33bb11b7fde789462b -D --force
 
 find ../patches/ -name "*.diff" -print0 | xargs -0 -I {} sh -c 'echo "Applying {}" && git apply  --reject --whitespace=fix {} || (echo "Failed to apply patches" && exit 1)'
 
