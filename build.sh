@@ -4,7 +4,7 @@ export PATH=$PWD/depot_tools:$PATH
 mkdir angle
 cd angle
 
-fetch --no-history angle
+gclient config --name angle --unmanaged https://chromium.googlesource.com/angle/angle.git
 
 echo "target_os = ['android']" >> .gclient
 gclient sync --no-history --revision c411081f2d36632a5850bc33bb11b7fde789462b -D --force
