@@ -1,13 +1,13 @@
 #!/bin/sh
 git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
 export PATH=$PWD/depot_tools:$PATH
-mkdir angle
-cd angle
 
 gclient config --name angle --unmanaged https://chromium.googlesource.com/angle/angle.git
-
 echo "target_os = ['android']" >> .gclient
 gclient sync --no-history --revision c411081f2d36632a5850bc33bb11b7fde789462b -D --force
+
+cd angle
+cp -v ../.gclient .
 
 find ../patches/ -name "*.diff" -print0 | xargs -0 -I {} sh -c 'echo "Applying {}" && git apply  --reject --whitespace=fix {} || (echo "Failed to apply patches" && exit 1)'
 
