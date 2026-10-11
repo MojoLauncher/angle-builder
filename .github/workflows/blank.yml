@@ -19,6 +19,17 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - target_arch: arm64
+            android_target: arm64-v8a
+          - target_arch: arm
+            android_target: armeabi-v7a
+          - target_arch: x64
+            android_target: x86_64
+          - target_arch: x86
+            android_target: x86
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -30,26 +41,28 @@ jobs:
         run: bash build.sh
 
       # Runs a set of commands using the runners shell
-      - name: Build arm64
+      - name: Build ${{ matrix.android_target }}
         run: |
-          export TARGET_ARCH=arm64
-          export ANDROID_TARGET=arm64-v8a
+          export TARGET_ARCH=${{ matrix.target_arch }}
+          export ANDROID_TARGET=${{ matrix.android_target }}
           bash build_arch.sh
-      - name: Build arm
-        run: |
-          export TARGET_ARCH=arm
-          export ANDROID_TARGET=armeabi-v7a
-          bash build_arch.sh
-      - name: Build x86_64
-        run: |
-          export TARGET_ARCH=x64
-          export ANDROID_TARGET=x86_64
-          bash build_arch.sh
-      - name: Build x86
-        run: |
-          export TARGET_ARCH=x86
-          export ANDROID_TARGET=x86
-          bash build_arch.sh
+      - name: Upload result
+        uses: actions/upload-artifact@v4.6.2
+        with:
+           name: angle-${{ matrix.android_target }}
+           path: build_out/
+
+  package:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download result
+        uses: actions/download-artifact@v4
+        with:
+          pattern: angle-*
+          path: build_out/
+          merge-multiple: true
       - name: Upload result
         uses: actions/upload-artifact@v4.6.2
         with:
